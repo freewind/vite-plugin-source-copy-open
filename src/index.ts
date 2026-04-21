@@ -7,6 +7,7 @@ export {
   formatSourceLocation,
   openInEditor,
   setupOpenEditorClient,
+  type SourceLocationFormatOptions,
   type SourceLocation,
 } from './browser';
 export { viteSourceCopyOpenPlugin as default } from './combined-plugin';

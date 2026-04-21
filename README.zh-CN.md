@@ -36,7 +36,12 @@ export default defineConfig({
 - `openEditorReactPlugin`
 - `setupOpenEditorClient`
 - `openInEditor`
+- `formatSourceLocation`
 - `copySourceLocation`
+
+`formatSourceLocation(location, { includeLabel: true })` 和
+`copySourceLocation(location, { includeLabel: true })` 可以在格式化/复制结果里带上
+`location.label`；默认仍然只返回 `file:line:column`。
 
 ## 功能
 

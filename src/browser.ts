@@ -9,6 +9,10 @@ export interface SourceLocation {
   label?: string;
 }
 
+export interface SourceLocationFormatOptions {
+  includeLabel?: boolean;
+}
+
 function normalizeLocation(location: SourceLocation) {
   return {
     ...location,
@@ -16,13 +20,26 @@ function normalizeLocation(location: SourceLocation) {
   };
 }
 
-export function formatSourceLocation(location: SourceLocation) {
+export function formatSourceLocation(
+  location: SourceLocation,
+  options: SourceLocationFormatOptions = {},
+) {
   const resolved = normalizeLocation(location);
-  return `${resolved.file}:${resolved.line}:${resolved.column}`;
+  const formattedLocation = `${resolved.file}:${resolved.line}:${resolved.column}`;
+  const label = resolved.label?.trim();
+
+  if (options.includeLabel && label) {
+    return `${label} ${formattedLocation}`;
+  }
+
+  return formattedLocation;
 }
 
-export async function copySourceLocation(location: SourceLocation) {
-  await navigator.clipboard.writeText(formatSourceLocation(location));
+export async function copySourceLocation(
+  location: SourceLocation,
+  options: SourceLocationFormatOptions = {},
+) {
+  await navigator.clipboard.writeText(formatSourceLocation(location, options));
 }
 
 export function buildOpenInEditorUrl(location: SourceLocation, options: { baseUrl?: string; port?: string } = {}) {

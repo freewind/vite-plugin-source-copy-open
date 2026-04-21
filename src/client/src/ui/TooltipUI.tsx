@@ -8,7 +8,7 @@ import { inspectorState } from '../inspector/inspectorState';
 import { openEditor } from '../inspector/openEditor';
 import { type CodeSource, type CodeSourceMeta } from '../resolve';
 import { logError } from '../utils/logError';
-import { formatDisplaySourceLocation } from '../utils/sourceLocation';
+import { formatDisplaySourceLocation, formatDisplaySourceSummary } from '../utils/sourceLocation';
 import {
   inspectorEnableBridge,
   inspectorExitBridge,
@@ -44,6 +44,8 @@ interface TooltipUIState {
   isPending: boolean;
   /** 当前聚焦的源码元信息 */
   meta?: CodeSourceMeta;
+  /** 当前 tooltip 的单行复制文本 */
+  copyText: string;
   /** 复制成功状态 */
   copied: boolean;
   /** 复制态重置计时器 */
@@ -68,6 +70,7 @@ export function TooltipUI() {
   const state: TooltipUIState = {
     isPending: false,
     meta: undefined,
+    copyText: '',
     copied: false,
     copyTimer: null,
   };
@@ -146,10 +149,12 @@ export function TooltipUI() {
       elements.el.textContent = `${source.el} in `;
       elements.name.textContent = `<${source.meta.name}>`;
       elements.file.textContent = formatLocation(source.meta);
+      state.copyText = formatCopyText(source);
     } else {
       elements.el.textContent = '';
       elements.name.textContent = '';
       elements.file.textContent = '';
+      state.copyText = '';
     }
 
     updateActionState();
@@ -234,6 +239,18 @@ export function TooltipUI() {
     return formatDisplaySourceLocation(meta);
   }
 
+  function formatCopyText(source: CodeSource) {
+    if (!source.meta) {
+      return '';
+    }
+
+    return formatDisplaySourceSummary({
+      ...source.meta,
+      el: source.el,
+      name: source.meta.name,
+    });
+  }
+
   function resetCopyState() {
     state.copied = false;
     state.copyTimer = null;
@@ -247,7 +264,7 @@ export function TooltipUI() {
     if (!state.meta) return;
 
     try {
-      await navigator.clipboard.writeText(formatLocation(state.meta));
+      await navigator.clipboard.writeText(state.copyText);
       state.copied = true;
       if (state.copyTimer != null) {
         clearTimeout(state.copyTimer);

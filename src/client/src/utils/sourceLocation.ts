@@ -34,3 +34,19 @@ export function getDisplaySourceFile(file: string) {
 export function formatDisplaySourceLocation(location: { file: string; line: number; column?: number }) {
   return `${getDisplaySourceFile(location.file)}:${location.line}:${location.column ?? 1}`;
 }
+
+export function formatDisplaySourceSummary(location: {
+  file: string;
+  line: number;
+  column?: number;
+  el?: string;
+  name?: string;
+}) {
+  const parts = [
+    location.el ? `${location.el} in` : '',
+    location.name ? `<${location.name}>` : '',
+    formatDisplaySourceLocation(location),
+  ].filter(Boolean);
+
+  return parts.join(' ');
+}

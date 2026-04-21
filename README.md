@@ -36,7 +36,12 @@ The package also exports:
 - `openEditorReactPlugin`
 - `setupOpenEditorClient`
 - `openInEditor`
+- `formatSourceLocation`
 - `copySourceLocation`
+
+`formatSourceLocation(location, { includeLabel: true })` and `copySourceLocation(location, { includeLabel: true })`
+can include `location.label` in the copied/formatted output. By default they still return only
+`file:line:column`.
 
 ## Features
 
