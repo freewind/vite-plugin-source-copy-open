@@ -126,6 +126,7 @@ function buildFormatConfigs(
       output: {
         dir: outDir,
         format: 'cjs',
+        exports: 'named',
         sourcemap: __DEV__,
         entryFileNames: makeEntryNames(files.cjs.outputs),
         chunkFileNames: 'chunk-[hash].cjs',
@@ -178,7 +179,7 @@ function groupExportsByFolder(exports: Record<string, string | BuildOutput>) {
 
   for (const specifier in exports) {
     // 忽略通配符导出
-    if (specifier === './*') continue;
+    if (specifier === './*' || specifier === './package.json') continue;
 
     const entry = normalizeEntryName(specifier);
     const src = `./src/${entry}.ts`;

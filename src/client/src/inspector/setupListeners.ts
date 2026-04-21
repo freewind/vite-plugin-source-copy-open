@@ -67,6 +67,9 @@ const SHORTCUT_KEYS = new Set(['Enter', 'Space']);
  */
 export function setupListeners(opts: SetupListenersOptions) {
   const { once, crossIframe } = getOptions();
+  const ACTIVE_ELEMENT_SWITCH_DELAY = 100;
+  let pendingElementTimer: number | null = null;
+  let pendingElement: HTMLElement | null = null;
 
   // 使用包装器包装所有回调，保证在执行前统一清理临时属性
   const wrappedCallbacks = {
@@ -125,9 +128,15 @@ export function setupListeners(opts: SetupListenersOptions) {
     if (!shouldProcessEvent()) return;
 
     const targetEl = getValidElement(e);
-    if (targetEl !== inspectorState.activeEl) {
-      inspectorState.activeEl = targetEl;
-      wrappedCallbacks.onActiveElement(targetEl);
+    if (targetEl === inspectorState.activeEl) {
+      clearPendingElementChange();
+      return;
+    }
+
+    if (inspectorState.activeEl && targetEl) {
+      scheduleActiveElementChange(targetEl);
+    } else {
+      commitActiveElementChange(targetEl);
     }
   }
 
@@ -171,8 +180,7 @@ export function setupListeners(opts: SetupListenersOptions) {
     if (inspectorState.isUIHovering) return;
     // 仅处理鼠标离开视口的情况
     if (e.pointerType === 'mouse' && !e.relatedTarget) {
-      inspectorState.activeEl = null;
-      wrappedCallbacks.onActiveElement(null);
+      commitActiveElementChange(null);
     }
   }
 
@@ -230,6 +238,33 @@ export function setupListeners(opts: SetupListenersOptions) {
    */
   function getFinalElement(fallback: HTMLElement) {
     return inspectorState.activeEl?.isConnected ? inspectorState.activeEl : fallback;
+  }
+
+  function scheduleActiveElementChange(targetEl: HTMLElement | null) {
+    if (targetEl === pendingElement && pendingElementTimer != null) {
+      return;
+    }
+    clearPendingElementChange();
+    pendingElement = targetEl;
+    pendingElementTimer = window.setTimeout(() => {
+      commitActiveElementChange(pendingElement);
+    }, ACTIVE_ELEMENT_SWITCH_DELAY);
+  }
+
+  function clearPendingElementChange() {
+    if (pendingElementTimer != null) {
+      clearTimeout(pendingElementTimer);
+      pendingElementTimer = null;
+    }
+    pendingElement = null;
+  }
+
+  function commitActiveElementChange(targetEl: HTMLElement | null) {
+    clearPendingElementChange();
+    if (targetEl !== inspectorState.activeEl) {
+      inspectorState.activeEl = targetEl;
+      wrappedCallbacks.onActiveElement(targetEl);
+    }
   }
 
   /**

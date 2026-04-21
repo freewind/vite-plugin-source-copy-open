@@ -1,19 +1,78 @@
 {
-  "private": true,
-  "name": "open-editor-local-workspace",
+  "name": "vite-plugin-source-copy-open",
+  "version": "0.1.0",
+  "description": "Vite + React source inspector plugin based on open-editor with ergonomic tooltip and hold-Option workflow.",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freewind/vite-plugin-source-copy-open.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freewind/vite-plugin-source-copy-open/issues"
+  },
+  "homepage": "https://github.com/freewind/vite-plugin-source-copy-open#readme",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./browser": {
+      "require": "./dist/browser.cjs",
+      "import": "./dist/browser.js",
+      "types": "./dist/browser.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "packageManager": "pnpm@9.0.0",
   "workspaces": [
     "src/*",
     "demo"
   ],
   "scripts": {
-    "build": "pnpm -r --filter './src/*' build",
-    "check": "tsc --noEmit && pnpm -r --filter './src/*' check",
-    "clean": "rimraf -g 'src/*/dist' 'demo/dist'",
+    "build": "pnpm run build:root && pnpm -r --filter './src/*' build",
+    "build:root": "rimraf dist && pnpm rollup -c",
+    "check": "pnpm -r --filter './src/*' check && tsc --noEmit",
+    "clean": "rimraf -g 'dist' 'src/*/dist' 'demo/dist'",
     "demo:dev": "pnpm --dir demo dev",
     "demo:build": "pnpm --dir demo build",
-    "demo:preview": "pnpm --dir demo preview"
+    "demo:preview": "pnpm --dir demo preview",
+    "prepack": "pnpm build:root"
+  },
+  "keywords": [
+    "vite",
+    "react",
+    "inspector",
+    "open-editor",
+    "source-location",
+    "debugger"
+  ],
+  "peerDependencies": {
+    "vite": ">=4"
+  },
+  "dependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/parser": "^7.27.5",
+    "@rollup/pluginutils": "^5.1.4",
+    "connect": "^3.7.0",
+    "cors": "^2.8.5",
+    "launch-editor": "^2.6.0",
+    "magic-string": "^0.30.14",
+    "outmatch": "^1.0.0",
+    "unplugin": "^2.3.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",
@@ -21,9 +80,13 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@swc-node/register": "^1.10.10",
     "@swc/core": "^1.12.7",
+    "@types/connect": "^3.4.35",
+    "@types/cors": "^2.8.13",
     "@types/node": "20.5.6",
+    "@types/react": "^18.2.45",
+    "@types/react-reconciler": "^0.28.2",
+    "@vue/runtime-core": "^3.3.4",
     "autoprefixer": "^10.4.21",
-    "magic-string": "^0.30.14",
     "postcss": "^8.5.6",
     "postcss-discard-comments": "^7.0.4",
     "postcss-minify-selectors": "^7.0.5",
