@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "name": "open-editor-local-workspace",
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "workspaces": [
+    "src/*",
+    "demo"
+  ],
+  "scripts": {
+    "build": "pnpm -r --filter './src/*' build",
+    "check": "tsc --noEmit && pnpm -r --filter './src/*' check",
+    "clean": "rimraf -g 'src/*/dist' 'demo/dist'",
+    "demo:dev": "pnpm --dir demo dev",
+    "demo:build": "pnpm --dir demo build",
+    "demo:preview": "pnpm --dir demo preview"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@swc-node/register": "^1.10.10",
+    "@swc/core": "^1.12.7",
+    "@types/node": "20.5.6",
+    "autoprefixer": "^10.4.21",
+    "magic-string": "^0.30.14",
+    "postcss": "^8.5.6",
+    "postcss-discard-comments": "^7.0.4",
+    "postcss-minify-selectors": "^7.0.5",
+    "rimraf": "^6.0.1",
+    "rollup": "^3.28.1",
+    "rollup-plugin-dts": "^6.2.1",
+    "rollup-plugin-swc3": "^0.12.1",
+    "typescript": "^5.8.3"
+  }
+}
