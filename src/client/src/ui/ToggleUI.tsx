@@ -37,7 +37,7 @@ export function ToggleUI() {
   const DRAGGING_CLASS = 'oe-toggle-dnd';
   // 定义触摸设备时添加的 CSS 类名
   const TOUCH_DEVICE_CLASS = 'oe-toggle-touch';
-  const SHORTCUT_LABEL = 'Shortcut: Option';
+  const SHORTCUT_LABEL = 'Hold Option';
 
   // 初始化元素引用和内部状态，初始状态均设定为 false
   const elements: ToggleUIElements = {} as ToggleUIElements;

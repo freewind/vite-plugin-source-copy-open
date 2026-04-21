@@ -43,6 +43,12 @@ export interface InspectorState {
    * @default false
    */
   isUIHovering: boolean;
+
+  /**
+   * 当前是否由快捷键按住态启用
+   * @default false
+   */
+  isShortcutPressed: boolean;
 }
 
 /**
@@ -56,4 +62,5 @@ export const inspectorState: InspectorState = {
   activeEl: null,
   prevActiveEl: null,
   isUIHovering: false,
+  isShortcutPressed: false,
 };

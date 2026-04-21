@@ -54,21 +54,33 @@ function initKeyboardEvents() {
   on(
     'keydown',
     (e: KeyboardEvent) => {
-      if (shouldToggleInspector(e)) {
-        toggleInspectorMode();
+      if (shouldEnableInspectorByShortcut(e)) {
+        enableInspectorByShortcut();
       }
     },
     { capture: true },
   );
+  on(
+    'keyup',
+    (e: KeyboardEvent) => {
+      if (shouldDisableInspectorByShortcut(e)) {
+        disableInspectorByShortcut();
+      }
+    },
+    { capture: true },
+  );
+  on('blur', disableInspectorByShortcut);
 }
 
 /**
- * 判断是否触发模式切换
+ * 判断是否通过快捷键启用检查器
  */
-function shouldToggleInspector(e: KeyboardEvent) {
+function shouldEnableInspectorByShortcut(e: KeyboardEvent) {
   return (
     !inspectorState.isTreeOpen &&
     !e.repeat &&
+    !inspectorState.isShortcutPressed &&
+    !inspectorState.isEnable &&
     !e.metaKey &&
     !e.ctrlKey &&
     !e.shiftKey &&
@@ -77,13 +89,29 @@ function shouldToggleInspector(e: KeyboardEvent) {
 }
 
 /**
- * 切换检测器工作模式
+ * 判断是否应在松开快捷键后退出检查器
  */
-function toggleInspectorMode() {
+function shouldDisableInspectorByShortcut(e: KeyboardEvent) {
+  return inspectorState.isShortcutPressed && (e.code === 'AltLeft' || e.code === 'AltRight');
+}
+
+/**
+ * 通过按住快捷键启用检查器
+ */
+function enableInspectorByShortcut() {
+  inspectorState.isShortcutPressed = true;
+  inspectorEnableBridge.emit();
+}
+
+/**
+ * 在快捷键松开或窗口失焦时退出检查器
+ */
+function disableInspectorByShortcut() {
+  if (!inspectorState.isShortcutPressed) return;
+
+  inspectorState.isShortcutPressed = false;
   if (inspectorState.isEnable) {
     inspectorExitBridge.emit();
-  } else {
-    inspectorEnableBridge.emit();
   }
 }
 

@@ -51,6 +51,7 @@ export async function inspectorExit() {
     isEnable: false,
     isRendering: false,
     activeEl: null,
+    isShortcutPressed: false,
   });
 
   // 事件监听清理
