@@ -37,6 +37,7 @@ export function ToggleUI() {
   const DRAGGING_CLASS = 'oe-toggle-dnd';
   // 定义触摸设备时添加的 CSS 类名
   const TOUCH_DEVICE_CLASS = 'oe-toggle-touch';
+  const SHORTCUT_LABEL = 'Shortcut: Alt+Cmd+O';
 
   // 初始化元素引用和内部状态，初始状态均设定为 false
   const elements: ToggleUIElements = {} as ToggleUIElements;
@@ -175,6 +176,7 @@ export function ToggleUI() {
           <path d="M512 388.95312527a123.04687473 123.04687473 0 1 0 0 246.09374946 123.04687473 123.04687473 0 0 0 0-246.09374946z m0 49.21874973a73.828125 73.828125 0 1 1 0 147.65625 73.828125 73.828125 0 0 1 0-147.65625z" />
         </svg>
       </button>
+      <span className="oe-toggle-hint">{SHORTCUT_LABEL}</span>
     </div>
   );
 }

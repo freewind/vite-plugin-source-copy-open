@@ -4,7 +4,10 @@ import { CssUtils, applyStyle, addClass, removeClass } from '../utils/dom';
 import { getDOMRect } from '../utils/getDOMRect';
 import { safeArea } from '../utils/safeArea';
 import { type BoxPosition } from '../inspector/computedBoxModel';
-import { type CodeSource } from '../resolve';
+import { inspectorState } from '../inspector/inspectorState';
+import { openEditor } from '../inspector/openEditor';
+import { type CodeSource, type CodeSourceMeta } from '../resolve';
+import { logError } from '../utils/logError';
 import {
   inspectorEnableBridge,
   inspectorExitBridge,
@@ -24,6 +27,12 @@ interface TooltipUIElements {
   name: HTMLElement;
   /** 显示文件路径的 DOM 节点 */
   file: HTMLElement;
+  /** 操作区容器 */
+  actions: HTMLElement;
+  /** 复制按钮 */
+  copy: HTMLButtonElement;
+  /** 打开按钮 */
+  open: HTMLButtonElement;
 }
 
 /**
@@ -32,6 +41,12 @@ interface TooltipUIElements {
 interface TooltipUIState {
   /** 标识是否处于更新挂起状态 */
   isPending: boolean;
+  /** 当前聚焦的源码元信息 */
+  meta?: CodeSourceMeta;
+  /** 复制成功状态 */
+  copied: boolean;
+  /** 复制态重置计时器 */
+  copyTimer: number | null;
 }
 
 /**
@@ -45,10 +60,15 @@ export function TooltipUI() {
   const TOOLTIP_SHOW_CLASS = 'oe-tooltip-show';
   // 渲染保留边距，防止提示元素紧贴窗口边缘
   const RENDER_RESERVE_SIZE = 4;
+  // 让 tooltip 和选中元素尽量贴近，便于鼠标连续移动
+  const TOOLTIP_OVERLAP_SIZE = 6;
 
   const elements = {} as TooltipUIElements;
   const state: TooltipUIState = {
     isPending: false,
+    meta: undefined,
+    copied: false,
+    copyTimer: null,
   };
   // mitt 用于存放 pending 状态下挂起的任务
   const pending = mitt();
@@ -84,6 +104,7 @@ export function TooltipUI() {
    */
   function handleInspectorExit() {
     removeClass(elements.root, TOOLTIP_SHOW_CLASS);
+    inspectorState.isUIHovering = false;
     updateSource();
   }
 
@@ -119,16 +140,20 @@ export function TooltipUI() {
       transform: CssUtils.translate(RENDER_RESERVE_SIZE, RENDER_RESERVE_SIZE),
     });
 
+    state.meta = source?.meta;
     if (source?.meta) {
-      // 更新 DOM 内显示的文本内容
       elements.el.textContent = `${source.el} in `;
       elements.name.textContent = `<${source.meta.name}>`;
-      elements.file.textContent = `${source.meta.file}:${source.meta.line}:${source.meta.column}`;
-
-      // 解除挂起状态并执行 pending 中的任务
-      state.isPending = false;
-      pending.emit();
+      elements.file.textContent = formatLocation(source.meta);
+    } else {
+      elements.el.textContent = '';
+      elements.name.textContent = '';
+      elements.file.textContent = '';
     }
+
+    updateActionState();
+    state.isPending = false;
+    pending.emit();
   }
 
   /**
@@ -188,20 +213,92 @@ export function TooltipUI() {
     const isTopPosition = position.top > minAvailableY;
     // 若满足条件则计算上方显示的坐标，否则显示在下方
     const targetY = isTopPosition
-      ? position.top - rootHeight - RENDER_RESERVE_SIZE
-      : position.bottom + RENDER_RESERVE_SIZE;
+      ? position.top - rootHeight + TOOLTIP_OVERLAP_SIZE
+      : position.bottom - TOOLTIP_OVERLAP_SIZE;
 
     const minY = safeArea.top + RENDER_RESERVE_SIZE;
     const maxY = winHeight - rootHeight - safeArea.bottom - RENDER_RESERVE_SIZE;
     return clamp(targetY, minY, maxY);
   }
 
+  function updateActionState() {
+    const hasMeta = Boolean(state.meta);
+    elements.actions.hidden = !hasMeta;
+    elements.copy.disabled = !hasMeta;
+    elements.open.disabled = !hasMeta;
+    elements.copy.textContent = state.copied ? 'Copied ✓' : 'Copy';
+  }
+
+  function formatLocation(meta: CodeSourceMeta) {
+    return `${meta.file}:${meta.line}:${meta.column}`;
+  }
+
+  function resetCopyState() {
+    state.copied = false;
+    state.copyTimer = null;
+    updateActionState();
+  }
+
+  async function handleCopyClick(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!state.meta) return;
+
+    try {
+      await navigator.clipboard.writeText(formatLocation(state.meta));
+      state.copied = true;
+      if (state.copyTimer != null) {
+        clearTimeout(state.copyTimer);
+      }
+      state.copyTimer = window.setTimeout(resetCopyState, 1500);
+      updateActionState();
+    } catch {
+      logError('copy source location failed');
+    }
+  }
+
+  function handleOpenClick(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!state.meta) return;
+    void openEditor(state.meta).catch(() => {});
+  }
+
+  function handlePointerEnter() {
+    inspectorState.isUIHovering = true;
+  }
+
+  function handlePointerLeave() {
+    inspectorState.isUIHovering = false;
+  }
+
   // 返回工具提示的自定义 JSX 结构，通过 ref 回调保存 DOM 元素引用
   return (
-    <div className="oe-tooltip" ref={(el) => (elements.root = el)}>
+    <div
+      className="oe-tooltip"
+      ref={(el) => (elements.root = el)}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+    >
       <span className="oe-tooltip-el" ref={(el) => (elements.el = el)} />
       <span className="oe-tooltip-name" ref={(el) => (elements.name = el)} />
       <span className="oe-tooltip-file" ref={(el) => (elements.file = el)} />
+      <div className="oe-tooltip-actions" ref={(el) => (elements.actions = el)} hidden>
+        <button
+          className="oe-tooltip-action"
+          ref={(el) => (elements.copy = el)}
+          onClick={handleCopyClick}
+        />
+        <button
+          className="oe-tooltip-action"
+          ref={(el) => (elements.open = el)}
+          onClick={handleOpenClick}
+        >
+          Open
+        </button>
+      </div>
     </div>
   );
 }

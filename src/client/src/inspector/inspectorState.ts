@@ -37,6 +37,12 @@ export interface InspectorState {
    * @default null
    */
   prevActiveEl: HTMLElement | null;
+
+  /**
+   * 当前是否正与检查器自身 UI 交互
+   * @default false
+   */
+  isUIHovering: boolean;
 }
 
 /**
@@ -49,4 +55,5 @@ export const inspectorState: InspectorState = {
   isTreeOpen: false,
   activeEl: null,
   prevActiveEl: null,
+  isUIHovering: false,
 };

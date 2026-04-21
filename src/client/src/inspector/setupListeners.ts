@@ -2,6 +2,7 @@ import { checkValidElement } from '../utils/checkElement';
 import { isTopWindow } from '../utils/topWindow';
 import { getOptions } from '../options';
 import { off, on } from '../event';
+import { HTML_INSPECTOR_ELEMENT_TAG_NAME } from '../constants';
 import {
   checkClickedElement,
   setupClickedElementAttrs,
@@ -139,6 +140,9 @@ export function setupListeners(opts: SetupListenersOptions) {
     const element = (
       e.pointerType === 'touch' ? document.elementFromPoint(e.clientX, e.clientY) : e.target
     ) as HTMLElement;
+    if (element?.tagName === HTML_INSPECTOR_ELEMENT_TAG_NAME || inspectorState.isUIHovering) {
+      return inspectorState.activeEl;
+    }
     return checkValidElement(element) ? element : null;
   }
 
@@ -164,6 +168,7 @@ export function setupListeners(opts: SetupListenersOptions) {
    */
   function handleLeaveScreen(e: PointerEvent) {
     if (crossIframe && !isTopWindow) return;
+    if (inspectorState.isUIHovering) return;
     // 仅处理鼠标离开视口的情况
     if (e.pointerType === 'mouse' && !e.relatedTarget) {
       inspectorState.activeEl = null;
@@ -204,6 +209,8 @@ export function setupListeners(opts: SetupListenersOptions) {
    */
   function handleInspect(e: PointerEvent) {
     processSilentEvent(e);
+
+    if (e.type === 'click') return;
 
     const targetEl = e.target as HTMLElement;
     if (!checkClickedElement(targetEl)) return;

@@ -108,6 +108,30 @@
   transition: all 0.1s;
 }
 
+.oe-toggle-hint {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 10px);
+  padding: 6px 10px;
+  color: var(--text-color);
+  white-space: nowrap;
+  background: var(--bg-color-opt);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-50%) translateX(6px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+  pointer-events: none;
+}
+
+.oe-toggle:hover .oe-toggle-hint,
+.oe-toggle:focus-within .oe-toggle-hint {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
 /* 触屏设备适配样式 */
 .oe-toggle-touch {
   padding: 10px;
@@ -165,7 +189,7 @@
   box-shadow: var(--shadow);
   overflow: hidden;
   visibility: hidden;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .oe-tooltip-show {
@@ -188,6 +212,43 @@
   text-decoration: underline;
   word-wrap: break-word;
   color: var(--text-color2);
+}
+
+.oe-tooltip-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.oe-tooltip-action {
+  padding: 3px 8px;
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid var(--bg-color2);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.oe-tooltip-action:hover,
+.oe-tooltip-action:focus-visible {
+  color: var(--bg-color);
+  background: var(--cyan);
+  border-color: var(--cyan);
+  transform: translateY(-1px);
+}
+
+.oe-tooltip-action:disabled {
+  opacity: 0.45;
+  transform: none;
+  cursor: not-allowed;
 }
 
 /* ======================== 树形结构模块 ======================== */
