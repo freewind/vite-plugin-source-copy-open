@@ -8,10 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@open-editor/react": "workspace:*",
-    "@open-editor/vite": "workspace:*",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "vite-plugin-source-copy-open": "file:../vite-plugin-source-copy-open-0.1.0.tgz"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

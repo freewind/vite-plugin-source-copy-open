@@ -4,6 +4,8 @@
 
 It keeps the upstream source-location pipeline, then adds a few small interaction changes aimed at everyday local development.
 
+This fork copies the required upstream source into the package itself. The published artifact does not require installing `@open-editor/*` packages alongside it.
+
 ## Install
 
 ```bash
@@ -61,15 +63,28 @@ This shortcut change is intentional: one hand can stay on the keyboard while the
 pnpm install
 pnpm build
 pnpm check
-pnpm demo:dev
 ```
+
+For local package verification, the demo intentionally installs the packed tarball:
+
+```bash
+pnpm demo:install-local
+pnpm demo:dev
+pnpm demo:build
+```
+
+The flow is:
+
+1. `pnpm pack` builds `vite-plugin-source-copy-open-<version>.tgz`
+2. `demo/package.json` installs that tarball via `file:../vite-plugin-source-copy-open-<version>.tgz`
+3. the demo runs against the same artifact another local project would install
 
 ## Publish Checklist
 
 ```bash
 pnpm build
 pnpm check
-npm pack --dry-run
+pnpm pack
 npm publish
 ```
 

@@ -7,6 +7,37 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@babel/core':
+        specifier: ^7.27.4
+        version: 7.29.0
+      '@babel/parser':
+        specifier: ^7.27.5
+        version: 7.29.2
+      '@rollup/pluginutils':
+        specifier: ^5.1.4
+        version: 5.3.0(rollup@3.30.0)
+      connect:
+        specifier: ^3.7.0
+        version: 3.7.0
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.6
+      launch-editor:
+        specifier: ^2.6.0
+        version: 2.13.2
+      magic-string:
+        specifier: ^0.30.14
+        version: 0.30.21
+      outmatch:
+        specifier: ^1.0.0
+        version: 1.0.0
+      unplugin:
+        specifier: ^2.3.5
+        version: 2.3.11
+      vite:
+        specifier: '>=4'
+        version: 4.5.14(@types/node@20.5.6)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^25.0.4
@@ -23,15 +54,27 @@ importers:
       '@swc/core':
         specifier: ^1.12.7
         version: 1.15.30
+      '@types/connect':
+        specifier: ^3.4.35
+        version: 3.4.38
+      '@types/cors':
+        specifier: ^2.8.13
+        version: 2.8.19
       '@types/node':
         specifier: 20.5.6
         version: 20.5.6
+      '@types/react':
+        specifier: ^18.2.45
+        version: 18.3.28
+      '@types/react-reconciler':
+        specifier: ^0.28.2
+        version: 0.28.9(@types/react@18.3.28)
+      '@vue/runtime-core':
+        specifier: ^3.3.4
+        version: 3.5.32
       autoprefixer:
         specifier: ^10.4.21
         version: 10.5.0(postcss@8.5.10)
-      magic-string:
-        specifier: ^0.30.14
-        version: 0.30.21
       postcss:
         specifier: ^8.5.6
         version: 8.5.10
@@ -59,18 +102,15 @@ importers:
 
   demo:
     dependencies:
-      '@open-editor/react':
-        specifier: workspace:*
-        version: link:../src/react
-      '@open-editor/vite':
-        specifier: workspace:*
-        version: link:../src/vite
       react:
         specifier: ^18.3.1
         version: 18.3.1
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      vite-plugin-source-copy-open:
+        specifier: file:../vite-plugin-source-copy-open-0.1.0.tgz
+        version: file:vite-plugin-source-copy-open-0.1.0.tgz(rollup@3.30.0)(vite@4.5.14(@types/node@20.5.6))
     devDependencies:
       '@types/react':
         specifier: ^18.3.12
@@ -1161,6 +1201,13 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
+  vite-plugin-source-copy-open@file:vite-plugin-source-copy-open-0.1.0.tgz:
+    resolution: {integrity: sha512-B3BCrAQ08tvoEqCiIMlT3SqQxnJ1ekt205Gg7sywDWXZ8xXOGtIBlBjo6qSFxxzE1Lo8dVKn46MNuXxIXmxaJA==, tarball: file:vite-plugin-source-copy-open-0.1.0.tgz}
+    version: 0.1.0
+    engines: {node: '>=18'}
+    peerDependencies:
+      vite: '>=4'
+
   vite@4.5.14:
     resolution: {integrity: sha512-+v57oAaoYNnO3hIu5Z/tJRZjq5aHM2zDve9YZ8HngVHbhk66RStobhb1sqPMIPEleV6cNKYK4eGrAbE9Ulbl2g==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -2110,6 +2157,22 @@ snapshots:
   utils-merge@1.0.1: {}
 
   vary@1.1.2: {}
+
+  vite-plugin-source-copy-open@file:vite-plugin-source-copy-open-0.1.0.tgz(rollup@3.30.0)(vite@4.5.14(@types/node@20.5.6)):
+    dependencies:
+      '@babel/core': 7.29.0
+      '@babel/parser': 7.29.2
+      '@rollup/pluginutils': 5.3.0(rollup@3.30.0)
+      connect: 3.7.0
+      cors: 2.8.6
+      launch-editor: 2.13.2
+      magic-string: 0.30.21
+      outmatch: 1.0.0
+      unplugin: 2.3.11
+      vite: 4.5.14(@types/node@20.5.6)
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
 
   vite@4.5.14(@types/node@20.5.6):
     dependencies:

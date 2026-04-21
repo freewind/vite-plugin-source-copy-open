@@ -1,4 +1,4 @@
-import { DS } from '@open-editor/shared/debugSource';
+import { DS } from '../../../shared/src/debugSource';
 import { type CodeSourceMeta } from '.';
 import { type Resolver, createResolver } from './createResolver';
 

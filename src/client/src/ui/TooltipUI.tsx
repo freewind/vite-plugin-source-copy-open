@@ -1,4 +1,4 @@
-import { clamp } from '@open-editor/shared';
+import { clamp } from '../../../shared/src';
 import { mitt } from '../utils/mitt';
 import { CssUtils, applyStyle, addClass, removeClass } from '../utils/dom';
 import { getDOMRect } from '../utils/getDOMRect';
@@ -8,6 +8,7 @@ import { inspectorState } from '../inspector/inspectorState';
 import { openEditor } from '../inspector/openEditor';
 import { type CodeSource, type CodeSourceMeta } from '../resolve';
 import { logError } from '../utils/logError';
+import { formatDisplaySourceLocation } from '../utils/sourceLocation';
 import {
   inspectorEnableBridge,
   inspectorExitBridge,
@@ -230,7 +231,7 @@ export function TooltipUI() {
   }
 
   function formatLocation(meta: CodeSourceMeta) {
-    return `${meta.file}:${meta.line}:${meta.column}`;
+    return formatDisplaySourceLocation(meta);
   }
 
   function resetCopyState() {

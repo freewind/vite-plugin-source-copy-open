@@ -38,18 +38,16 @@
     "node": ">=18"
   },
   "packageManager": "pnpm@9.0.0",
-  "workspaces": [
-    "src/*",
-    "demo"
-  ],
   "scripts": {
-    "build": "pnpm run build:root && pnpm -r --filter './src/*' build",
+    "build": "pnpm run build:root",
     "build:root": "rimraf dist && pnpm rollup -c",
-    "check": "pnpm -r --filter './src/*' check && tsc --noEmit",
-    "clean": "rimraf -g 'dist' 'src/*/dist' 'demo/dist'",
-    "demo:dev": "pnpm --dir demo dev",
-    "demo:build": "pnpm --dir demo build",
-    "demo:preview": "pnpm --dir demo preview",
+    "check": "tsc --noEmit",
+    "clean": "rimraf -g 'dist' 'demo/dist' 'vite-plugin-source-copy-open-*.tgz'",
+    "pack:local": "pnpm pack",
+    "demo:install-local": "pnpm run pack:local && pnpm --dir demo install --force",
+    "demo:dev": "pnpm run demo:install-local && pnpm --dir demo dev",
+    "demo:build": "pnpm run demo:install-local && pnpm --dir demo build",
+    "demo:preview": "pnpm run demo:install-local && pnpm --dir demo preview",
     "prepack": "pnpm build:root"
   },
   "keywords": [

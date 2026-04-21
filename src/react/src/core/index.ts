@@ -1,7 +1,7 @@
 import { extname, relative } from 'node:path';
-import { normalizePath } from '@open-editor/shared';
-import { DS } from '@open-editor/shared/debugSource';
-import { isDev } from '@open-editor/shared/node';
+import { normalizePath } from '../../../shared/src';
+import { DS } from '../../../shared/src/debugSource';
+import { isDev } from '../../../shared/src/node';
 import { createUnplugin, type UnpluginFactory } from 'unplugin';
 import { createFilter } from '@rollup/pluginutils';
 import MagicString from 'magic-string';

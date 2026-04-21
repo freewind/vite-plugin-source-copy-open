@@ -1,4 +1,4 @@
-import { type DSValue } from '@open-editor/shared/debugSource';
+import { type DSValue } from '../../../shared/src/debugSource';
 import outmatch from 'outmatch';
 import { getOptions } from '../options';
 

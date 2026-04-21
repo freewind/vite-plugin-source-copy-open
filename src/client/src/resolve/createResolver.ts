@@ -1,4 +1,4 @@
-import { type DSValue } from '@open-editor/shared/debugSource';
+import { type DSValue } from '../../../shared/src/debugSource';
 import { isValidFileName } from './resolveUtil';
 import { type CodeSourceMeta } from '.';
 

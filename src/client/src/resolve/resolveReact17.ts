@@ -1,5 +1,5 @@
-import { isFn } from '@open-editor/shared/type';
-import { DS } from '@open-editor/shared/debugSource';
+import { isFn } from '../../../shared/src/type';
+import { DS } from '../../../shared/src/debugSource';
 import { type Fiber } from 'react-reconciler';
 import { type Resolver, createResolver } from './createResolver';
 import { reactBabel2DSValue } from './resolveUtil';

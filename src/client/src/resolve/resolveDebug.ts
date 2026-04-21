@@ -1,5 +1,5 @@
-import { hasOwn } from '@open-editor/shared/object';
-import { DS } from '@open-editor/shared/debugSource';
+import { hasOwn } from '../../../shared/src/object';
+import { DS } from '../../../shared/src/debugSource';
 import { checkValidElement } from '../utils/checkElement';
 
 /**

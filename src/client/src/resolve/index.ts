@@ -1,4 +1,4 @@
-import { DS, type DSValue } from '@open-editor/shared/debugSource';
+import { DS, type DSValue } from '../../../shared/src/debugSource';
 import { CURRENT_INSPECT_ID } from '../constants';
 import { getCache, setCache } from './resolveCache';
 import { resolveReact17 } from './resolveReact17';

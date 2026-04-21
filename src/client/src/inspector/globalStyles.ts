@@ -1,4 +1,5 @@
 import { createStyleController } from '../utils/createStyleController';
+import { css } from '../utils/css';
 
 /**
  * 全局样式覆盖模块

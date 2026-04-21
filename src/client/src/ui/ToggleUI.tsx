@@ -1,4 +1,4 @@
-import { clamp } from '@open-editor/shared';
+import { clamp } from '../../../shared/src';
 import { CssUtils, applyStyle, addClass, removeClass } from '../utils/dom';
 import { safeArea, safeAreaObserver } from '../utils/safeArea';
 import { inspectorState } from '../inspector/inspectorState';

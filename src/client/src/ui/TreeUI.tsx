@@ -2,6 +2,7 @@ import { addClass, removeClass, replaceChild } from '../utils/dom';
 import { treeCloseBridge, openEditorBridge, treeOpenBridge } from '../bridge';
 import { getOptions } from '../options';
 import { type CodeSource, type CodeSourceMeta } from '../resolve';
+import { formatDisplaySourceLocation } from '../utils/sourceLocation';
 
 interface TreeUIElements {
   /** 根容器元素 */
@@ -91,7 +92,7 @@ export function TreeUI() {
   function renderTreeNodes(nodes: CodeSourceMeta[], index: number) {
     const meta = nodes[index];
     const name = `<${meta.name}>`;
-    const file = `${meta.file}:${meta.line}:${meta.column}`;
+    const file = formatDisplaySourceLocation(meta);
 
     return (
       <div className="oe-tree-item">

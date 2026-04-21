@@ -1,4 +1,4 @@
-import { ServerApis } from '@open-editor/shared';
+import { ServerApis } from '../../../shared/src';
 import { logError } from '../utils/logError';
 import { dispatchEvent } from '../utils/dispatchEvent';
 import { openEditorEndBridge, openEditorErrorBridge, openEditorStartBridge } from '../bridge';

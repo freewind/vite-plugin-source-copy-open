@@ -1,4 +1,4 @@
-import { isObjectsEqual } from '@open-editor/shared/object';
+import { isObjectsEqual } from '../../../shared/src/object';
 import { addClass, removeClass } from '../utils/dom';
 import {
   type BoxModel,

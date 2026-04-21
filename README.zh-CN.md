@@ -4,6 +4,8 @@
 
 它保留了 upstream 的源码定位能力，只在交互层做了一些偏实用的小改动，方便本地开发时直接使用。
 
+这个 fork 已经把所需的 upstream 源码复制进当前包内。最终发布产物不再要求额外安装 `@open-editor/*` 这些包。
+
 ## 安装
 
 ```bash
@@ -61,15 +63,28 @@ export default defineConfig({
 pnpm install
 pnpm build
 pnpm check
-pnpm demo:dev
 ```
+
+本地验证时，demo 会故意安装打包出来的 tarball：
+
+```bash
+pnpm demo:install-local
+pnpm demo:dev
+pnpm demo:build
+```
+
+流程是：
+
+1. `pnpm pack` 生成 `vite-plugin-source-copy-open-<version>.tgz`
+2. `demo/package.json` 通过 `file:../vite-plugin-source-copy-open-<version>.tgz` 安装这个 tarball
+3. demo 运行时使用的就是“另一个本地项目实际会安装到的产物”
 
 ## 发布前检查
 
 ```bash
 pnpm build
 pnpm check
-npm pack --dry-run
+pnpm pack
 npm publish
 ```
 

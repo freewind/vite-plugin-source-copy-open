@@ -1,6 +1,6 @@
-import { isFn } from '@open-editor/shared/type';
-import { hasOwn } from '@open-editor/shared/object';
-import { DS } from '@open-editor/shared/debugSource';
+import { isFn } from '../../../shared/src/type';
+import { hasOwn } from '../../../shared/src/object';
+import { DS } from '../../../shared/src/debugSource';
 import { type Resolver, createResolver } from './createResolver';
 import { resolveForFiber } from './resolveReact17';
 import { reactBabel2DSValue } from './resolveUtil';

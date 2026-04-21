@@ -260,5 +260,7 @@ function getCorePlugins() {
  * 构建客户端专属插件，仅在客户端构建时启用
  */
 function getClientPlugins() {
-  return (isClientBuild ? [css({ sourceMap: __DEV__ })] : []) as Plugin[];
+  // The published root package also bundles client UI code, so CSS transforms
+  // must run there too instead of only in the old standalone client package build.
+  return [css({ sourceMap: __DEV__ })] as Plugin[];
 }

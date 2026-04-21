@@ -47,7 +47,7 @@ export default function App() {
         />
         <FeatureCard
           title="Minimal local wiring"
-          description="This demo consumes the copied upstream packages from the current workspace."
+          description="This demo installs the packed tarball, matching how another local project would consume it."
         />
       </section>
     </main>
