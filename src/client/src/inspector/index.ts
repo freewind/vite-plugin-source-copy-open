@@ -66,7 +66,14 @@ function initKeyboardEvents() {
  * 判断是否触发模式切换
  */
 function shouldToggleInspector(e: KeyboardEvent) {
-  return !inspectorState.isTreeOpen && e.altKey && e.metaKey && e.code === 'KeyO';
+  return (
+    !inspectorState.isTreeOpen &&
+    !e.repeat &&
+    !e.metaKey &&
+    !e.ctrlKey &&
+    !e.shiftKey &&
+    (e.code === 'AltLeft' || e.code === 'AltRight')
+  );
 }
 
 /**
