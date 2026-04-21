@@ -1,0 +1,55 @@
+{
+  "name": "@open-editor/shared",
+  "version": "1.0.0-beta.3",
+  "description": "internal utils shared across @open-editor packages",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./node": {
+      "require": "./dist/node.js",
+      "import": "./dist/node.mjs",
+      "types": "./dist/node.d.ts"
+    },
+    "./type": {
+      "require": "./dist/type.js",
+      "import": "./dist/type.mjs",
+      "types": "./dist/type.d.ts"
+    },
+    "./object": {
+      "require": "./dist/object.js",
+      "import": "./dist/object.mjs",
+      "types": "./dist/object.d.ts"
+    },
+    "./debugSource": {
+      "require": "./dist/debugSource.js",
+      "import": "./dist/debugSource.mjs",
+      "types": "./dist/debugSource.d.ts"
+    },
+    "./*": "./dist/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm rollup -c",
+    "dev": "pnpm build -w --environment __DEV__",
+    "check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zjxxxxxxxxx/open-editor.git",
+    "directory": "packages/shared"
+  },
+  "author": "zjxxxxxxxxx <954270063@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zjxxxxxxxxx/open-editor/issues"
+  },
+  "homepage": "https://github.com/zjxxxxxxxxx/open-editor#readme"
+}
